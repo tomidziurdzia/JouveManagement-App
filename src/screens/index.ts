@@ -1,3 +1,4 @@
+import {HomeScreen} from './HomeScreen';
 import {SignInScreen} from './SignInScreen';
 
-export {SignInScreen};
+export {SignInScreen, HomeScreen};

@@ -1,53 +1,44 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {SignInScreen} from '../screens';
+import {HomeScreen, SignInScreen} from '../screens';
 import {Loading} from '../components';
+import {useAuthEmployee} from '../hooks/useAuthEmployee';
+import {useAppSelector} from '../store/store';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
 
 export const Navigator = () => {
-  const [initialRouteName, setInitialRouteName] = useState('');
+  const {checkAuthTokenEmployee} = useAuthEmployee();
+  const {status} = useAppSelector(state => state.auth);
 
-  // useEffect(() => {
-  //   authEmployee();
-  // }, []);
-
-  // const authEmployee = async () => {
-  //   try {
-  //     let employeeData = await AsyncStorage.getItem('employee');
-  //     console.log(employeeData);
-  //     if (employeeData) {
-  //       employeeData = JSON.parse(employeeData);
-  //       if (!employeeData) {
-  //         setInitialRouteName('SignInScreen');
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     setInitialRouteName('SignInScreen');
-  //   }
-  // };
   useEffect(() => {
-    setInitialRouteName('SignInScreen');
+    setTimeout(() => {
+      checkAuthTokenEmployee();
+    }, 1000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (status === 'checking') {
+    return <Loading visible={true} />;
+  }
 
   return (
     <>
-      {!initialRouteName ? (
-        <Loading visible={true} />
-      ) : (
-        <Stack.Navigator
-          initialRouteName={initialRouteName}
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor: 'white',
-            },
-          }}>
+      <Stack.Navigator
+        initialRouteName="SignInScreen"
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: 'white',
+          },
+        }}>
+        {status === 'not-authenticated' ? (
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
-        </Stack.Navigator>
-      )}
+        ) : (
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        )}
+      </Stack.Navigator>
     </>
   );
 };

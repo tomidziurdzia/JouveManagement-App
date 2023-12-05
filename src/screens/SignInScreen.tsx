@@ -55,11 +55,12 @@ const SignInScreen = () => {
   console.log(alert);
 
   return (
-    <SafeAreaView style={loginStyles.formScreen}>
+    <SafeAreaView
+      style={{...loginStyles.formScreen, backgroundColor: COLORS.primary}}>
       <View style={loginStyles.formImageContainer}>
         <Image
           style={loginStyles.formImage}
-          source={require('../../assets/logo.jpg')}
+          source={require('../../assets/logo-transparente.png')}
         />
       </View>
       <View style={loginStyles.formContainer}>
@@ -104,10 +105,10 @@ const SignInScreen = () => {
           </View>
         </View>
 
+        {errorMessage !== undefined && <AlertMessage msg={msg} error={error} />}
         <TouchableOpacity onPress={handleSubmit} style={loginStyles.button}>
           <Text style={loginStyles.buttonText}>Sign In</Text>
         </TouchableOpacity>
-        {errorMessage !== undefined && <AlertMessage msg={msg} error={error} />}
       </View>
     </SafeAreaView>
   );
