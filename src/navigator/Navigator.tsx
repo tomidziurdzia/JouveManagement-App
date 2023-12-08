@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {HomeScreen, SignInScreen} from '../screens';
-import {Loading} from '../components';
+import {SignInScreen} from '../screens';
 import {useAuthEmployee} from '../hooks/useAuthEmployee';
 import {useAppSelector} from '../store/store';
+import {TabsNavigator} from './TabsNavigator';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Stack = createNativeStackNavigator();
@@ -13,15 +13,9 @@ export const Navigator = () => {
   const {status} = useAppSelector(state => state.auth);
 
   useEffect(() => {
-    setTimeout(() => {
-      checkAuthTokenEmployee();
-    }, 1000);
+    checkAuthTokenEmployee();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (status === 'checking') {
-    return <Loading visible={true} />;
-  }
 
   return (
     <>
@@ -33,10 +27,10 @@ export const Navigator = () => {
             backgroundColor: 'white',
           },
         }}>
-        {status === 'not-authenticated' ? (
+        {status === 'not-authenticated' || status === 'checking' ? (
           <Stack.Screen name="SignInScreen" component={SignInScreen} />
         ) : (
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="TabsNavigator" component={TabsNavigator} />
         )}
       </Stack.Navigator>
     </>

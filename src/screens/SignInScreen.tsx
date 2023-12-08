@@ -31,7 +31,7 @@ const SignInScreen = () => {
   });
   const [alert, setAlert] = useState<ErrorInterface>({
     msg: '',
-    error: undefined,
+    error: false,
   });
   const [hidePassword, setHidePassword] = useState(false);
 
@@ -47,13 +47,9 @@ const SignInScreen = () => {
 
   const handleSubmit = async () => {
     await startLogin(values as SignIn);
-    // setLoading(true);
   };
 
   const {msg, error} = alert;
-
-  console.log(alert);
-
   return (
     <SafeAreaView
       style={{...loginStyles.formScreen, backgroundColor: COLORS.primary}}>
@@ -81,6 +77,7 @@ const SignInScreen = () => {
           <View style={loginStyles.inputContainer}>
             <View style={loginStyles.input}>
               <TextInput
+                secureTextEntry={hidePassword ? true : false}
                 onChangeText={text => handleChange(text, 'password')}
                 placeholder="Enter your password"
               />
@@ -105,7 +102,7 @@ const SignInScreen = () => {
           </View>
         </View>
 
-        {errorMessage !== undefined && <AlertMessage msg={msg} error={error} />}
+        {msg && <AlertMessage msg={msg} error={error} />}
         <TouchableOpacity onPress={handleSubmit} style={loginStyles.button}>
           <Text style={loginStyles.buttonText}>Sign In</Text>
         </TouchableOpacity>

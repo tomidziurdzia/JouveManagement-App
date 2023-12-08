@@ -1,3 +1,4 @@
 import {Navigator} from './Navigator';
+import {TabsNavigator} from './TabsNavigator';
 
-export {Navigator};
+export {Navigator, TabsNavigator};
